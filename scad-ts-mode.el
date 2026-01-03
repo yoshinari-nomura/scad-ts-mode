@@ -25,7 +25,7 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
 
-;; Commentary:
+;;; Commentary:
 ;;
 ;;  This program requires ~/.emacs.d/tree-sitter/libtree-sitter-openscad.so
 ;;  See: https://github.com/openscad/tree-sitter-openscad/
@@ -53,7 +53,7 @@
    "source_file"
    (treesit-node-type (treesit-node-parent node))))
 
-(defun scad-ts-mode--node-name:text (node)
+(defun scad-ts-mode--node-name-text (node)
   "Return text in name: from Tree-sitter NODE.
 Code: function function_name()...
 NODE: (function_item function name: (identifier)...
@@ -62,13 +62,13 @@ Return: \"function_name\""
    (treesit-node-child-by-field-name node "name")
    t))
 
-(defun scad-ts-mode--node-child-name:text (node)
-  "Perform `scad-ts-mode-node-name' in NODE's child.
+(defun scad-ts-mode--node-child-name-text (node)
+  "Perform `scad-ts-mode-node-name-text' in NODE's child.
 Code: VARNAME = 3;
 NODE: (var_declaration
         (assignment name: (identifier) = value: (integer))...
 Return: \"VARNAME\""
-  (scad-ts-mode-node-name (treesit-node-child node 0)))
+  (scad-ts-mode--node-name-text (treesit-node-child node 0)))
 
 (defun scad-ts-mode--any (symbols)
   "Return regexp to strict-match a string in the list SYMBOLS.
@@ -297,8 +297,8 @@ This command requires git and C compiler."
           (treesit--call-process-signal
            "git" nil t nil "clone"
            "https://github.com/openscad/tree-sitter-openscad.git" workdir)
-          (treesit-install-language-grammar 'openscad)))
-    (delete-directory workdir t)))
+          (treesit-install-language-grammar 'openscad))
+      (delete-directory workdir t))))
 
 ;;;###autoload
 (define-derived-mode scad-ts-mode prog-mode "SCAD[ts]"
@@ -338,12 +338,12 @@ standard `eglot'.  Eglot will work seamlessly with `flymake-mode',
     ;; Imenu
     (setq-local treesit-simple-imenu-settings
                 `(("Function" "\\`function_item\\'"
-                   nil scad-ts-mode--node-name:text)
+                   nil scad-ts-mode--node-name-text)
                   ("Module" "\\`module_item\\'"
-                   nil scad-ts-mode--node-name:text)
+                   nil scad-ts-mode--node-name-text)
                   ("Variable" "\\`var_declaration\\'"
                    scad-ts-mode--node-toplevel-p
-                   scad-ts-mode--node-child-name:text)))
+                   scad-ts-mode--node-child-name-text)))
 
     ;; Font-lock
     (setq-local treesit-font-lock-settings scad-ts-mode--font-lock-settings)
