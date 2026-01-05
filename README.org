@@ -66,7 +66,7 @@
            (hydra-scad-dbus/body)))
    #+end_src
 
-   file:scripts/openscad-setfocus is a custom shell script that opens
+   [[file:scripts/openscad-setfocus]] is a custom shell script that opens
    an OpenSCAD GUI instance if one is not already running, or simply
    focuses the existing instance without opening a new one.
 

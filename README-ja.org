@@ -66,7 +66,7 @@
            (hydra-scad-dbus/body)))
    #+end_src
 
-   file:scripts/openscad-setfocus は，自前のシェルスクリプトで，openscad コマンドによる
+   [[file:scripts/openscad-setfocus]] は，自前のシェルスクリプトで，openscad コマンドによる
    GUI インスタンスがなければ (実行されていなければ) 開き，既にあれば，
    openscad を開かずにフォーカスチェンジをします．
 
