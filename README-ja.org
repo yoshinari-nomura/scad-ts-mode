@@ -9,6 +9,8 @@
 #+OPTIONS: timestamp:nil timestamps:nil
 #+LANGUAGE: ja
 
+#+html: <a href="https://melpa.org/#/scad-ts-mode"><img alt="MELPA" src="https://melpa.org/packages/scad-ts-mode-badge.svg"/></a>
+
 [[file:README.org][English]]
 
 * scad-ts-mode とは
@@ -22,8 +24,10 @@
 
 * インストールとセットアップ
 ** パッケージのインストール
-   + TBA
-   + MELPA で公開予定です．現状は，clone して ~load-path~ を通して ~(require 'scad-ts-mode)~ を実行して下さい．
+   scad-ts-modeは [[http://melpa.org/][MELPA]] に収録されています．パッケージングシステムを正しく設定している場合，
+   =M-x= =package-install= =scad-ts-mode= でインストールできるでしょう．
+
+   詳しくは [[https://github.com/milkypostman/melpa#usage][MELPA usage]] を参照してください．
 
 ** パッケージのセットアップ
    init.el の例です．

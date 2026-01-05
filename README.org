@@ -9,6 +9,8 @@
 #+OPTIONS: timestamp:nil timestamps:nil
 #+LANGUAGE: en
 
+#+html: <a href="https://melpa.org/#/scad-ts-mode"><img alt="MELPA" src="https://melpa.org/packages/scad-ts-mode-badge.svg"/></a>
+
 [[file:README-ja.org][日本語 (Japanese)]]
 
 * What is scad-ts-mode
@@ -22,8 +24,10 @@
 
 * Installation and Setup
 ** Package Installation
-   + TBA
-   + Will be published on MELPA. Currently, clone the repository, add it to ~load-path~, and run ~(require 'scad-ts-mode)~.
+   scad-ts-mode is available on [[http://melpa.org/][MELPA]]. If you set up packaging system correctly,
+   you can install scad-ts-mode with package.el (=M-x= =package-install= =scad-ts-mode=).
+
+   Check [[https://github.com/milkypostman/melpa#usage][MELPA usage]] for details.
 
 ** Package Setup
    Example init.el configuration:
