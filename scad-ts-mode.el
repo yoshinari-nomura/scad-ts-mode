@@ -5,7 +5,7 @@
 ;; Author: Yoshinari Nomura <nom@quickhack.net>
 ;; Maintainer: Yoshinari Nomura <nom@quickhack.net>
 ;; Created: December 2025
-;; Version: 0.1.0
+;; Version: 0.2.0
 ;; Keywords: OpenSCAD languages tree-sitter
 ;; URL: https://github.com/yoshinari-nomura/scad-ts-mode
 ;; Package-Requires: ((emacs "29.3"))
