@@ -309,7 +309,8 @@ See `regexp-opt' for details."
    ;; 4) Operator
    :language 'openscad
    :feature 'operator
-   '((["||" "&&" "==" "!=" "<" ">" "<=" ">=" "+" "-" "*" "/" "%" "^" "!" ":" "="]
+   '((["||" "&&" "==" "!=" "<" ">" "<=" ">=" "+"
+       "-" "*" "/" "%" "^" "!" ":" "="]
       @font-lock-operator-face)
      ((ternary_expression ["?" ":"] @font-lock-operator-face))))
   "Tree-sitter font-lock settings for `scad-ts-mode'.")
