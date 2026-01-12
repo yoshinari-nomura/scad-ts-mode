@@ -15,9 +15,12 @@
 
 * What is scad-ts-mode
   A major mode for OpenSCAD with Tree-sitter support for indentation, font-locking,
-  and imenu integration.
+  and imenu integration, featuring:
 
-  Provides better indentation compared to the existing [[https://github.com/openscad/emacs-scad-mode][scad-mode]] which is based on c-mode indent.
+  + Better indentation and syntax highlighting compared to the existing c-mode-based [[https://github.com/openscad/emacs-scad-mode][scad-mode]]
+  + Support for launching ~(C-c C-c)~ and lifecycle management of OpenSCAD GUI instances
+  + On Linux:
+    + Comfortable input focus control when operating the GUI with [[https://github.com/Lenbok/scad-dbus][scad-dbus]]
 
 * System Requirements
   + Emacs 29.3 or newer (Tree-sitter support)
@@ -29,52 +32,54 @@
 
    Check [[https://github.com/milkypostman/melpa#usage][MELPA usage]] for details.
 
-** Package Setup
-   Example init.el configuration:
-   #+begin_src emacs-lisp
-     (use-package treesit
-       :init
-       (add-to-list 'auto-mode-alist '("\\.scad\\'" . scad-ts-mode))
-       (add-to-list 'major-mode-remap-alist '(scad-mode . scad-ts-mode)))
-
-     (use-package scad-ts-mode
-       :load-path "~/path/to/scad-ts-mode"
-       :ensure t
-       :after treesit
-       :mode "\\.scad\\'"
-       :init
-       (setq scad-ts-mode-indent-offset 2)
-       :config
-       ;; Optional
-       (add-hook 'scad-ts-mode-hook #'eglot-ensure)
-       (add-hook 'scad-ts-mode-hook #'electric-pair-local-mode)
-       :bind
-       (:map scad-ts-mode-map
-             ("C-c C-c" . 'my-scad-focus-or-open)))
-   #+end_src
-
-   Example to launch a corresponding OpenSCAD GUI instance from an Emacs buffer:
-   #+begin_src emacs-lisp
-     (defun my-scad-focus-or-open ()
-       "Open current buffer with openscad GUI command."
-       (interactive nil scad-mode scad-ts-mode)
-       (save-buffer)
-       (call-process "openscad-setfocus" nil 0 nil (buffer-file-name))
-       (sit-for 0.1)
-       (select-frame-set-input-focus (selected-frame))
-       (if (featurep 'scad-dbus)
-           (hydra-scad-dbus/body)))
-   #+end_src
-
-   [[file:scripts/openscad-setfocus]] is a custom shell script that opens
-   an OpenSCAD GUI instance if one is not already running, or simply
-   focuses the existing instance without opening a new one.
-
 ** Tree-sitter Language Grammar Installation
    Run ~M-x scad-ts-mode-install-language-grammar~ to install
    =~/.emacs.d/tree-sitter/libtree-sitter-openscad.so=.
 
+** Package Setup
+   Example init.el configuration:
+   #+begin_src emacs-lisp
+      (use-package treesit
+        :init
+        (add-to-list 'auto-mode-alist '("\\.scad\\'" . scad-ts-mode))
+        (add-to-list 'major-mode-remap-alist '(scad-mode . scad-ts-mode)))
+
+      (use-package scad-ts-mode
+        :ensure t
+        ;; :load-path "~/path/to/scad-ts-mode" ;; If install from GitHub
+        :after treesit
+        :mode "\\.scad\\'"
+        :init
+        (setq scad-ts-indent-offset 2)
+        :config
+        ;; Optional
+        (add-hook 'scad-ts-mode-hook #'eglot-ensure)
+        (add-hook 'scad-ts-mode-hook #'electric-pair-local-mode)
+        (add-hook 'scad-ts-mode-hook #'electric-indent-local-mode)
+        (add-hook 'scad-ts-mode-hook #'whitespace-mode))
+   #+end_src
+
+   If you are a Linux user, the following configuration will improve
+   the integration between Emacs and the GUI. xdotool is required.
+   #+begin_src emacs-lisp
+     (add-hook 'scad-ts-after-open-gui-functions #'scad-ts--gui-focus-control)
+   #+end_src
+
 * Integration with Other Packages
+** scad-dbus
+   If you're on Linux with D-Bus support, [[https://github.com/Lenbok/scad-dbus][scad-dbus]] is useful.
+   #+begin_src emacs-lisp
+     (use-package scad-dbus
+       :after scad-ts-mode
+       :load-path "~/path/to/scad-dbus" ;; If install from GitHub
+       :config
+       (add-hook 'scad-ts-after-open-gui-functions #'scad-ts--gui-focus-control)
+       (use-package hydra
+         :ensure t))
+   #+end_src
+   ~scad-ts--gui-focus-control~ returns input focus to Emacs after launching
+   the GUI with ~C-c C-c~ and displays the ~scad-dbus~ Hydra menu.
+
 ** Eglot
    Using the built-in eglot with openscad-lsp provides automatic integration
    with flymake, eldoc, and imenu for a comfortable editing experience.
@@ -93,25 +98,12 @@
        :bind
        (:map eglot-mode-map
              ("C-c r" . eglot-rename)
-             ("C-c o" . eglot-code-action-organize-imports)
              ("C-c h" . eldoc)
              ("C-c f" . flymake-show-buffer-diagnostics)
              ("C-c F" . flymake-show-project-diagnostics)))
    #+end_src
 
-** scad-dbus
-   If you're on Linux with D-Bus support, [[https://github.com/Lenbok/scad-dbus][Lenbok/scad-dbus]] is useful.
-   #+begin_src emacs-lisp
-     (use-package scad-dbus
-       :after scad-ts-mode
-       :load-path "~/path/to/scad-dbus"
-       :bind
-       (:map
-        scad-ts-mode-map ("C-c o" . 'my-scad-focus-or-open))
-       :config
-       (use-package hydra
-         :ensure t))
-   #+end_src
+   You can also get completion for function names and more with ~M-TAB~.
 
 ** Org-babel
    To use ~scad-ts-mode~ for code block editing and syntax highlighting
