@@ -18,7 +18,10 @@
   and imenu integration, featuring:
 
   + Better indentation and syntax highlighting compared to the existing c-mode-based [[https://github.com/openscad/emacs-scad-mode][scad-mode]]
-  + Support for launching ~(C-c C-c)~ and lifecycle management of OpenSCAD GUI instances
+  + Launching and lifecycle management of OpenSCAD GUI instances  ~(C-c C-c)~
+    + If there is no instance, it opens with the file in the buffer.
+    + If an instance already exists, do nothing (raise the GUI if on Linux).
+    + If the instance refers to another file, terminate the instance and restart it.
   + On Linux:
     + Comfortable input focus control when operating the GUI with [[https://github.com/Lenbok/scad-dbus][scad-dbus]]
 

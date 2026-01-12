@@ -18,7 +18,10 @@
   imenu との連携をサポートしていて，以下の特徴を持っています．
 
   + c-mode 由来の [[https://github.com/openscad/emacs-scad-mode][scad-mode]] よりも良い indent や syntax-highlight を提供します
-  + OpenSCAD GUI の起動 ~(C-c C-c)~ とライフサイクル管理を支援します
+  + OpenSCAD GUI の起動とライフサイクル管理を支援します ~(C-c C-c)~
+    + GUI インスタンスがなければ，バッファ中のファイルで開きます
+    + GUI インスタンスが既にあれば，何もしません (Linux なら GUI を Raise する)
+    + GUI インスタンスが別ファイルを参照している場合は，起動しなおします
   + Linux 環境において
     + [[https://github.com/Lenbok/scad-dbus][scad-dbus]] と連携した GUI 操作において快適な input フォーカスの制御を実現します
 
