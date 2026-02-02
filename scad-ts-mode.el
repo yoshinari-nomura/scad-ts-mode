@@ -284,19 +284,33 @@ See `regexp-opt' for details."
      ((parent-is "block") standalone-parent scad-ts-indent-offset)
      ((parent-is "transform_chain") parent-bol scad-ts-indent-offset)
 
-     ;; Second or later arguments/list-values follow the first sibling
+     ;;    function name() =
+     ;; <TAB>1;
+     ((parent-is "function_item") parent-bol scad-ts-indent-offset)
+     ;;    module name()
+     ;; <TAB>cube(5);
+     ((parent-is "module_item") parent-bol scad-ts-indent-offset)
+
+     ;; Second or later call arguments/declaration prams/list-values
+     ;; follow the first sibling
      ((match nil "arguments" nil 2 nil) (nth-sibling 1) 0)
      ((match nil "parameters" nil 2 nil) (nth-sibling 1) 0)
      ((match nil "list" nil 2 nil) (nth-sibling 1) 0)
-     ;; let(a=1, b=1...
+     ;;  let (a=1,
+     ;; <TAB> b=1
      ((match nil "assignments" nil 2 nil) (nth-sibling 1) 0)
 
      ;; First argument/list-value should be indented
      ((parent-is "arguments") parent-bol scad-ts-indent-offset)
      ((parent-is "parameters")  (nth-sibling 0) 1)
      ((parent-is "list") parent-bol scad-ts-indent-offset)
-     ;; let(a=1, b=1...
+     ;;    let (
+     ;; <TAB>a=1
      ((parent-is "assignments") parent-bol scad-ts-indent-offset)
+
+     ;;    variable =
+     ;; <TAB>1;
+     ((parent-is "assignment") parent-bol scad-ts-indent-offset)
 
      ;; If the node is inside an Error, the most likely situation is
      ;; that you pressed TAB while an if-statement or array-block is
